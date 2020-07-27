@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using WpfMvvmLearn.Common;
 using WpfMvvmLearn.Models;
 
 namespace WpfMvvmLearn.ViewModels
@@ -22,12 +23,26 @@ namespace WpfMvvmLearn.ViewModels
                 NotifyPropertyChanged("Image");
             }
         }
-        public ICommand ImageSelect { set; get; }
+        private DelegateCommand _imageSelectCommand;
+
+        public DelegateCommand ImageSelectCommand
+        {
+            get
+            {
+                if (_imageSelectCommand == null)
+                {
+                    _imageSelectCommand = new DelegateCommand(
+                        () => Image = CommaonLibrary.ImageSelect(),
+                        () => true
+                     );
+                }
+                return _imageSelectCommand;
+            }
+        }
 
         public MainWindowViewModels()
         {
             model = new MainWindowModels();
-            ImageSelect = new ImageSelectCommand(this);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -35,38 +50,6 @@ namespace WpfMvvmLearn.ViewModels
         private void NotifyPropertyChanged(String info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-    }
-
-    public class ImageSelectCommand : ICommand
-    {
-        private MainWindowViewModels _viewModel;
-
-        public ImageSelectCommand(MainWindowViewModels viewModel)
-        {
-            _viewModel = viewModel;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public event EventHandler CanExecuteChanged;
-
-        public void Execute(object parameter)
-        {
-            var openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-            {
-                var image = new BitmapImage(new Uri(openFileDialog.FileName));
-                _viewModel.Image = image;
-            }
-        }
-
-        public void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

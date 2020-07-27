@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <StackPanel>
-        <Button Command="{Binding ImageSelect}">画像選択</Button>
+        <Button Command="{Binding ImageSelectCommand}">画像選択</Button>
         <Button Command="{Binding ImageProcessing}">画像処理</Button>
         <Image Source="{Binding Image,UpdateSourceTrigger=PropertyChanged}" Height="400"></Image>
     </StackPanel>
