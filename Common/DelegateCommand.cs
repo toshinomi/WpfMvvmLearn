@@ -41,8 +41,6 @@ namespace WpfMvvmLearn.Common
         private readonly Action<T> _execute;
         private readonly Func<bool> _canExecute;
 
-        public event EventHandler CanExecuteChanged;
-
         public DelegateCommand(Action<T> execute) : this(execute, () => true) { }
 
         public DelegateCommand(Action<T> execute, Func<bool> canExecute)
@@ -61,5 +59,10 @@ namespace WpfMvvmLearn.Common
             return _canExecute();
         }
 
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
     }
 }

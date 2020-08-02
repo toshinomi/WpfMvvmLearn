@@ -2,11 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using WpfMvvmLearn.Common;
+using WpfMvvmLearn.Common.ImageProcessing;
 using WpfMvvmLearn.Models;
 
 namespace WpfMvvmLearn.ViewModels
@@ -25,7 +29,6 @@ namespace WpfMvvmLearn.ViewModels
         }
 
         private DelegateCommand<BitmapImage> _imageSelectCommand;
-
         public DelegateCommand<BitmapImage> ImageSelectCommand
         {
             get
@@ -33,10 +36,40 @@ namespace WpfMvvmLearn.ViewModels
                 if (_imageSelectCommand == null)
                 {
                     _imageSelectCommand = new DelegateCommand<BitmapImage>(
-                        (image) => Image = CommaonLibrary.ImageSelect(image)
+                        (image) =>
+                        {
+                            try
+                            {
+                                Image = CommonHelper.ImageSelect(image);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
                      );
                 }
                 return _imageSelectCommand;
+            }
+        }
+        private DelegateCommand<BitmapImage> _imageProcessingCommand;
+        public DelegateCommand<BitmapImage> ImageProcessingCommand
+        {
+            get
+            {
+                if (_imageProcessingCommand == null)
+                {
+                    _imageProcessingCommand = new DelegateCommand<BitmapImage>(
+                        (image) =>
+                        {
+                            var grayScale = new GrayScale();
+                            var writeableBitmap = new WriteableBitmap(image);
+                            grayScale.ImageProcessing(ref writeableBitmap);
+                            Image = CommonHelper.ToBitmapImage(writeableBitmap);
+                        }
+                     );
+                }
+                return _imageProcessingCommand;
             }
         }
 
