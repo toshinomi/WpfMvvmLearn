@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WpfMvvmLearn.Common
 {
-    class CommonInfomation
+    public class CommonInfomation
     {
         public enum Pixel
         {
