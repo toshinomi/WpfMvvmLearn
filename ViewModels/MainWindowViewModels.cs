@@ -62,9 +62,9 @@ namespace WpfMvvmLearn.ViewModels
                     _imageProcessingCommand = new DelegateCommand<BitmapImage>(
                         (image) =>
                         {
-                            var grayScale = new GrayScale();
+                            var edgeDetection = new EdgeDetection();
                             var writeableBitmap = new WriteableBitmap(image);
-                            grayScale.ImageProcessing(ref writeableBitmap);
+                            edgeDetection.ImageProcessing(ref writeableBitmap);
                             Image = CommonHelper.ToBitmapImage(writeableBitmap);
                         }
                      );
