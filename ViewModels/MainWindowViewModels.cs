@@ -11,7 +11,7 @@ using WpfMvvmLearn.Models;
 
 namespace WpfMvvmLearn.ViewModels
 {
-    public class MainWindowViewModels : INotifyPropertyChanged
+    public class MainWindowViewModels : ViewModelsBase
     {
         private MainWindowModels model;
         public BitmapImage Image
@@ -20,20 +20,20 @@ namespace WpfMvvmLearn.ViewModels
             set
             {
                 model.Image = value;
-                NotifyPropertyChanged("Image");
+                OnPropertyChanged("Image");
             }
         }
-        private DelegateCommand _imageSelectCommand;
 
-        public DelegateCommand ImageSelectCommand
+        private DelegateCommand<BitmapImage> _imageSelectCommand;
+
+        public DelegateCommand<BitmapImage> ImageSelectCommand
         {
             get
             {
                 if (_imageSelectCommand == null)
                 {
-                    _imageSelectCommand = new DelegateCommand(
-                        () => Image = CommaonLibrary.ImageSelect(),
-                        () => true
+                    _imageSelectCommand = new DelegateCommand<BitmapImage>(
+                        (image) => Image = CommaonLibrary.ImageSelect(image)
                      );
                 }
                 return _imageSelectCommand;
@@ -43,13 +43,6 @@ namespace WpfMvvmLearn.ViewModels
         public MainWindowViewModels()
         {
             model = new MainWindowModels();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(String info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
 }
