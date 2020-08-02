@@ -66,7 +66,8 @@ namespace WpfMvvmLearn.ViewModels
                             var writeableBitmap = new WriteableBitmap(image);
                             edgeDetection.ImageProcessing(ref writeableBitmap);
                             Image = CommonHelper.ToBitmapImage(writeableBitmap);
-                        }
+                        },
+                        () => Image != null
                      );
                 }
                 return _imageProcessingCommand;
